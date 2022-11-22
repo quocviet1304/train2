@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/danh-muc/{code}/{type}', [WebController::class, 'index'])->name('web.show');
+Route::post('/ajax/getProducts', [WebController::class, 'loadData'])->name('web.loadData');

@@ -25,7 +25,14 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helper/helpers.php",
+            "app/Helper/category/EnumBase.php",
+            "app/Helper/category/MotoCategory.php",
+            "app/Helper/category/MotoChar.php",
+            "app/Helper/category/MotoDisplacement.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -49,7 +56,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/dusk"
+            ]
         }
     },
     "config": {

@@ -2061,6 +2061,55 @@ module.exports = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+var app = {
+  model_kana_prefix: ['456'],
+  model_name_prefix: [],
+  model_displacement: [],
+  model_marker: [],
+  loadData: function loadData() {
+    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var cars = $('#cars');
+    var categoryColumn = cars.data('category');
+    $.ajax({
+      url: '/ajax/getProducts',
+      headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      },
+      type: "POST",
+      dataType: "json",
+      data: {
+        categoryColumn: categoryColumn,
+        page: page
+      },
+      beforeSend: function beforeSend() {
+        $('.overload').removeClass('hidden');
+      },
+      success: function success(result) {
+        cars.children('.list-card').html(result);
+        $('.overload').addClass('hidden');
+      },
+      error: function error(xhr, ajaxOptions, thrownError) {
+        console.log(xhr.status);
+        console.log(thrownError);
+      }
+    });
+  },
+  filter: function filter() {
+    $(document).on("click", '.action-filter', function () {
+      if (!$(this).hasClass('disable')) {
+        $(this).toggleClass('active');
+        var value = $(this).data('val');
+        var typeFilter = $(this).parents('.group-input').data('model');
+        app[typeFilter].push(value);
+        app.loadData();
+      }
+    });
+  }
+};
+$(document).ready(function () {
+  app.loadData();
+  app.filter();
+});
 
 /***/ }),
 
