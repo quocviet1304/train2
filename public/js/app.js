@@ -2062,7 +2062,7 @@ module.exports = {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 var app = {
-  model_kana_prefix: ['456'],
+  model_kana_prefix: [],
   model_name_prefix: [],
   model_displacement: [],
   model_marker: [],
@@ -2079,7 +2079,11 @@ var app = {
       dataType: "json",
       data: {
         categoryColumn: categoryColumn,
-        page: page
+        page: page,
+        model_kana_prefix: app.model_kana_prefix,
+        model_name_prefix: app.model_name_prefix,
+        model_displacement: app.model_displacement,
+        model_marker: app.model_marker
       },
       beforeSend: function beforeSend() {
         $('.overload').removeClass('hidden');

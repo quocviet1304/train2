@@ -1,8 +1,6 @@
 require('./bootstrap');
 const app = {
-    model_kana_prefix : [
-        '456'
-    ],
+    model_kana_prefix : [],
     model_name_prefix : [],
     model_displacement : [],
     model_marker : [],
@@ -20,7 +18,14 @@ const app = {
             },
             type: "POST",
             dataType: "json",
-            data: { categoryColumn, page },
+            data: {
+                categoryColumn,
+                page,
+                model_kana_prefix: app.model_kana_prefix,
+                model_name_prefix: app.model_name_prefix,
+                model_displacement: app.model_displacement,
+                model_marker: app.model_marker,
+            },
             beforeSend: function () {
                 $('.overload').removeClass('hidden');
             },
