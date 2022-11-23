@@ -5,6 +5,10 @@ const app = {
     model_name_prefix : [],
     model_displacement : [],
     model_maker_code : [],
+    model_code: {
+        code: [],
+        maker: []
+    },
     loadData(update = false)
     {
         let cars = $('#cars');
@@ -33,6 +37,8 @@ const app = {
                 if (update) {
                     if (result) cars.children('.list-card').append(result)
                 } else {
+                    app.model_code.code = [];
+                    app.model_code.maker = [];
                     cars.children('.list-card').html(result)
                 }
 
@@ -94,8 +100,45 @@ const app = {
             }
         })
     },
-    handleCheckbox(){
+    handleChooseCar()
+    {
+        function removeModelCode(code, maker){
+            let codeIndex = app.model_code.code.findIndex( item => item === code);
+            let makerIndex = app.model_code.maker.findIndex( item => item === maker);
+            if(codeIndex > -1) app.model_code.code.splice(codeIndex, 1);
+            if(makerIndex > -1) app.model_code.maker.splice(makerIndex, 1);
+        }
 
+        $(document).on('change', '.checkbox-item', function (){
+            let code = $(this).data('code')
+            let maker = $(this).data('maker')
+            if (this.checked) {
+                if (app.model_code.code.length >= 10) {
+                    alert('一度に10車種まで選択できます。')
+                    removeModelCode(code, maker)
+                    $(this).prop('checked', '');
+                }else{
+                    app.model_code.code.push(code)
+                    app.model_code.maker.push(maker)
+                }
+            } else {
+                removeModelCode(code, maker)
+            }
+
+            console.log(app.model_code)
+        })
+    },
+    handleCheckbox(){
+        $(document).on('click', '#add-car', function (){
+            if (app.model_code.code.length === 0) {
+                alert('一度に10車種まで選択できます。')
+            }else{
+                let urlCode = app.model_code.code.join('_');
+                let urlMaker = app.model_code.maker.join('_');
+                console.log([urlCode, urlMaker])
+                location.href = `/area?mmc=${urlMaker}?moc=${urlCode}`
+            }
+        })
     }
 }
 
@@ -103,5 +146,7 @@ $(document).ready(function () {
     app.loadData();
     app.filter();
     app.scrollLoad()
+    app.handleCheckbox()
+    app.handleChooseCar()
 })
 

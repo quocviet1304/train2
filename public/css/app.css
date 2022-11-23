@@ -118,19 +118,23 @@ nav .breadcrumb a{
     font-weight: bold;
 }
 
-#see-more{
-    position: fixed;
+#add-car{
     background-color: #119fc7;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10;
-    left: 50%;
-    bottom: 15px;
     text-decoration: none;
+    width: -moz-max-content;
+    width: max-content;
     padding: 10px;
     border-radius: 5px;
+    margin: 0 auto;
+}
+
+#add-car:hover{
+    color: #fff;
 }
 
 

@@ -11,7 +11,6 @@ class WebController extends Controller
     protected $pageDefault = 40;
     public function index($code, $type)
     {
-
         if (!$code || !$type) return redirect()->to('/');
 
         $motoCategory = new \MotoCategory();
@@ -104,5 +103,9 @@ class WebController extends Controller
                             ->groupBy($model)
                             ->pluck($model)
                             ->toArray();
+    }
+
+    public function handleUrl(){
+        dd('done');
     }
 }

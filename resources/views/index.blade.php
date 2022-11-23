@@ -72,7 +72,7 @@
             <div class="list-card">
 
             </div>
-{{--            <a href="javascript:;" id="see-more" >Xem Thêm</a>--}}
+            <a href="javascript:;" id="add-car">一度に10車種まで選択できます(10)</a>
         </div>
     </div>
 
@@ -82,6 +82,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="{{ asset('/js/lazy.js?ver='.verTime()) }}"></script>
 <script src="{{ asset('/js/app.js?ver='.verTime()) }}"></script>
 
 </html>
