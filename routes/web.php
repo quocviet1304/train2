@@ -19,6 +19,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/danh-muc/{code}/{type}', [WebController::class, 'index'])->name('web.show');
+Route::get('/category_model', [WebController::class, 'index'])->name('web.show');
 Route::get('/area', [WebController::class, 'handleUrl']);
 Route::post('/ajax/getProducts', [WebController::class, 'loadData'])->name('web.loadData');

@@ -28,6 +28,7 @@
         },
         "files": [
             "app/Helper/helpers.php",
+            "app/Helper/constain.php",
             "app/Helper/category/EnumBase.php",
             "app/Helper/category/MotoCategory.php",
             "app/Helper/category/MotoChar.php",

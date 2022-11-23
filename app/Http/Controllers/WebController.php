@@ -9,8 +9,10 @@ class WebController extends Controller
 {
     //
     protected $pageDefault = 40;
-    public function index($code, $type)
+    public function index()
     {
+        $type = request()->input('btype') ? B_TYPE : C_TYPE;
+        $code = request()->input('btype') ?? request()->input('ctype');
         if (!$code || !$type) return redirect()->to('/');
 
         $motoCategory = new \MotoCategory();

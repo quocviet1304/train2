@@ -28,7 +28,7 @@
     <ul class="">
         @foreach(get_all_const_in_class('MotoCategory',['CATEGORY_TYPE_TEIBAN', 'CATEGORY_TYPE_KODAWARI']) as $category)
             <li>
-                <a href="{{ route('web.show', [ 'code' =>  json_decode($category)->code, 'type' =>  json_decode($category)->type ]) }}">{{ json_decode($category)->name }}</a>
+                <a href="{{ convertUrlCategory(json_decode($category)->code, json_decode($category)->type) }}">{{ json_decode($category)->name }}</a>
             </li>
         @endforeach
     </ul>

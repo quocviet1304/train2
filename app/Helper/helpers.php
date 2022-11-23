@@ -22,4 +22,10 @@ function get_value_between_in_array($arr, $startValue, $endValue): bool
     return false;
 }
 
+function convertUrlCategory($code, $type) :string
+{
+    $typeUrl = $type === C_TYPE ? 'ctype' : 'btype';
+    return route('web.show') . '?' . $typeUrl . '=' . $code;
+}
+
 ?>
