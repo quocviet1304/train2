@@ -34,7 +34,7 @@
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoChar as $character)
                         @if(json_decode($character)->type === '1')
-                            <span class="action-filter" style="cursor: pointer" data-val="{{ json_decode($character)->name }}" >{{ json_decode($character)->name }}</span>
+                            <span class="action-filter @if(!in_array(json_decode($character)->code ,$enableKanaPrefix)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($character)->code }}" >{{ json_decode($character)->name }}</span>
                         @endif
                     @endforeach
                 </div>
@@ -44,7 +44,7 @@
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoChar as $character)
                         @if(json_decode($character)->type === '2')
-                            <span class="action-filter" style="cursor: pointer" data-val="{{ json_decode($character)->name }}" >{{ json_decode($character)->name }}</span>
+                            <span class="action-filter @if(!in_array(json_decode($character)->code ,$enableNamePrefix)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($character)->code }}" >{{ json_decode($character)->name }}</span>
                         @endif
                     @endforeach
                 </div>
@@ -53,15 +53,15 @@
                 <h5 class="title" >排気:</h5>
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoDisplacement as $displacement)
-                        <span class="action-filter" style="cursor: pointer" data-val="{{ json_decode($displacement)->name }}" >{{ json_decode($displacement)->name }}</span>
+                        <span class="action-filter @if(!get_value_between_in_array($enableDisplacement, json_decode($displacement)->from, json_decode($displacement)->to)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($displacement)->key }}" >{{ json_decode($displacement)->name }}</span>
                     @endforeach
                 </div>
             </div>
-            <div class="group-input d-flex align-items-center" data-model="model_marker">
+            <div class="group-input d-flex align-items-center" data-model="model_maker_code">
                 <h5 class="title" >排気:</h5>
                 <div class="list-filter d-flex">
                     @foreach($listMaker as $maker)
-                        <span class="action-filter" style="cursor: pointer" data-val="{{ $maker->model_maker_hyouji }}" >{{ $maker->model_maker_hyouji }}</span>
+                        <span class="action-filter @if(!in_array($maker->model_maker_code ,$enableMakerCode)) disable @endif" style="cursor: pointer" data-val="{{ $maker->model_maker_code }}" >{{ $maker->model_maker_hyouji }}</span>
                     @endforeach
                 </div>
             </div>
@@ -72,6 +72,7 @@
             <div class="list-card">
 
             </div>
+{{--            <a href="javascript:;" id="see-more" >Xem Thêm</a>--}}
         </div>
     </div>
 

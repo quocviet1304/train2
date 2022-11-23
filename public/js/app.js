@@ -2062,14 +2062,16 @@ module.exports = {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 var app = {
+  page_default: 1,
   model_kana_prefix: [],
   model_name_prefix: [],
   model_displacement: [],
-  model_marker: [],
+  model_maker_code: [],
   loadData: function loadData() {
-    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var update = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var cars = $('#cars');
     var categoryColumn = cars.data('category');
+    if (!update) app.page_default = 1;
     $.ajax({
       url: '/ajax/getProducts',
       headers: {
@@ -2079,18 +2081,18 @@ var app = {
       dataType: "json",
       data: {
         categoryColumn: categoryColumn,
-        page: page,
+        page: app.page_default,
         model_kana_prefix: app.model_kana_prefix,
         model_name_prefix: app.model_name_prefix,
         model_displacement: app.model_displacement,
-        model_marker: app.model_marker
-      },
-      beforeSend: function beforeSend() {
-        $('.overload').removeClass('hidden');
+        model_maker_code: app.model_maker_code
       },
       success: function success(result) {
-        cars.children('.list-card').html(result);
-        $('.overload').addClass('hidden');
+        if (update) {
+          if (result) cars.children('.list-card').append(result);
+        } else {
+          cars.children('.list-card').html(result);
+        }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
         console.log(xhr.status);
@@ -2101,18 +2103,53 @@ var app = {
   filter: function filter() {
     $(document).on("click", '.action-filter', function () {
       if (!$(this).hasClass('disable')) {
-        $(this).toggleClass('active');
         var value = $(this).data('val');
         var typeFilter = $(this).parents('.group-input').data('model');
-        app[typeFilter].push(value);
+        if ($(this).hasClass('active')) {
+          var index = app[typeFilter].findIndex(function (item) {
+            return item === value;
+          });
+          if (index > -1) {
+            app[typeFilter].splice(index, 1);
+          }
+        } else {
+          app[typeFilter].push(value);
+        }
+        if (typeFilter === 'model_kana_prefix') {
+          app.model_name_prefix = [];
+          $('.filter .group-input[data-model=model_name_prefix]').children().children().removeClass('active');
+        } else if (typeFilter === 'model_name_prefix') {
+          app.model_kana_prefix = [];
+          $('.filter .group-input[data-model=model_kana_prefix]').children().children().removeClass('active');
+        }
+        $(this).toggleClass('active');
         app.loadData();
       }
     });
-  }
+    $(document).on("click", ".reset-all", function () {
+      app.model_kana_prefix = [];
+      app.model_name_prefix = [];
+      app.model_displacement = [];
+      app.model_maker_code = [];
+      app.page_default = 1;
+      $('.action-filter').removeClass('active');
+      app.loadData();
+    });
+  },
+  scrollLoad: function scrollLoad() {
+    $(document).on('scroll', function () {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+        app.page_default++;
+        app.loadData(true);
+      }
+    });
+  },
+  handleCheckbox: function handleCheckbox() {}
 };
 $(document).ready(function () {
   app.loadData();
   app.filter();
+  app.scrollLoad();
 });
 
 /***/ }),
@@ -19369,12 +19406,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 /*!*******************************!*\
   !*** ./resources/css/app.css ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
+throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/postcss-loader/dist/cjs.js):\nSyntaxError\n\n(130:5) D:\\xampp\\htdocs\\train2\\resources\\css\\app.css Unknown word\n\n \u001b[90m 128 | \u001b[39m    bottom\u001b[33m:\u001b[39m 15px\u001b[33m;\u001b[39m\n \u001b[90m 129 | \u001b[39m    tra\n\u001b[1m\u001b[31m>\u001b[39m\u001b[22m\u001b[90m 130 | \u001b[39m    text-decoration\u001b[33m:\u001b[39m none\u001b[33m;\u001b[39m\n \u001b[90m     | \u001b[39m    \u001b[1m\u001b[31m^\u001b[39m\u001b[22m\n \u001b[90m 131 | \u001b[39m    padding\u001b[33m:\u001b[39m 10px\u001b[33m;\u001b[39m\n \u001b[90m 132 | \u001b[39m    border-radius\u001b[33m:\u001b[39m 5px\u001b[33m;\u001b[39m\n\n    at processResult (D:\\Xampp\\htdocs\\train2\\node_modules\\webpack\\lib\\NormalModule.js:758:19)\n    at D:\\Xampp\\htdocs\\train2\\node_modules\\webpack\\lib\\NormalModule.js:860:5\n    at D:\\Xampp\\htdocs\\train2\\node_modules\\loader-runner\\lib\\LoaderRunner.js:400:11\n    at D:\\Xampp\\htdocs\\train2\\node_modules\\loader-runner\\lib\\LoaderRunner.js:252:18\n    at context.callback (D:\\Xampp\\htdocs\\train2\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at Object.loader (D:\\xampp\\htdocs\\train2\\node_modules\\postcss-loader\\dist\\index.js:140:7)");
 
 /***/ }),
 
@@ -19612,42 +19646,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	(() => {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var [chunkIds, fn, priority] = deferred[i];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -19660,22 +19659,6 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		})();
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nmd = (module) => {
@@ -19685,68 +19668,13 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"/js/app": 0,
-/******/ 			"css/app": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
 /************************************************************************/
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	__webpack_require__("./resources/js/app.js");
+/******/ 	// This entry module doesn't tell about it's top-level declarations so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./resources/css/app.css");
 /******/ 	
 /******/ })()
 ;

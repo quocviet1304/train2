@@ -42,7 +42,20 @@ class WebController extends Controller
                         ->orderBy('mst_model_maker.model_maker_select_view_no')
                         ->get();
 
-        return view('index', compact('category', 'categoryMotoChar', 'categoryMotoDisplacement', 'totalCar', 'listMaker'));
+        $queryProducts = DB::table('mst_model_v2')
+            ->where('mst_model_v2.' . $category['colmn'], '=', 1)
+            ->where('model_count', '>', 0);
+
+
+       $enableKanaPrefix = $this->getEnable($queryProducts, 'model_kana_prefix');
+       $enableNamePrefix = $this->getEnable($queryProducts, 'model_name_prefix');
+       $enableDisplacement = $this->getEnable($queryProducts, 'model_displacement');
+       $enableMakerCode = $this->getEnable($queryProducts, 'model_maker_code');
+
+        return view('index', compact(
+            'category', 'categoryMotoChar', 'categoryMotoDisplacement', 'totalCar', 'listMaker', 'enableKanaPrefix',
+            'enableKanaPrefix', 'enableNamePrefix', 'enableDisplacement', 'enableMakerCode'
+        ));
 
     }
 
@@ -52,10 +65,11 @@ class WebController extends Controller
         $data = $request->all();
 
         $queryData = DB::table('mst_model_v2')
-            ->where('mst_model_v2.' . $data['categoryColumn'], '=', $data['page'])
+            ->where('mst_model_v2.' . $data['categoryColumn'], '=', 1)
             ->where('model_count', '>', 0);
 
         $products = $this->filter($queryData, $data);
+
 
         $jsonData = view('components.load-data',compact('products'))->render();
 
@@ -64,11 +78,31 @@ class WebController extends Controller
 
     public function filter($queryData, $data)
     {
+        $filterBetWeen = ['model_displacement'];
         foreach (collect($data)->except('categoryColumn', 'page') as $key => $item) {
-            $queryData->whereIn($key, $item);
+            if (in_array($key, $filterBetWeen)) {
+                foreach ($item as $index => $val) {
+                    $arrVal = explode('_', $val);
+                    if($index === 0){
+                        $queryData->whereBetween($key, [ $arrVal[0], $arrVal[1] ]);
+                    }else{
+                        $queryData->orWhereBetween($key, [ $arrVal[0], $arrVal[1] ]);
+                    }
+                }
+            } else {
+                $queryData->whereIn($key, $item);
+            }
         }
 
         return $queryData->paginate($this->pageDefault, ['*'], 'page', $data['page']);
 
+    }
+
+    public function getEnable($queryData, $model)
+    {
+        return $queryData->where($model, '<>', '')
+                            ->groupBy($model)
+                            ->pluck($model)
+                            ->toArray();
     }
 }

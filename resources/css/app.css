@@ -58,7 +58,7 @@ nav .breadcrumb a{
 
 .filter .group-input .list-filter span.disable
 {
-    color: #efefef;
+    color: #b4b4b4;
 }
 
 .filter .group-input .list-filter span:hover,
@@ -85,6 +85,7 @@ nav .breadcrumb a{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+    padding-bottom: 20px;
 }
 
 #cars .list-card .card-item{
@@ -113,5 +114,21 @@ nav .breadcrumb a{
     position: relative;
     background-color: #efefef;
     font-weight: bold;
+}
+
+#see-more{
+    position: fixed;
+    background-color: #119fc7;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10;
+    left: 50%;
+    bottom: 15px;
+    tra
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
 }
 
