@@ -12,7 +12,7 @@ class WebController extends Controller
     public function index()
     {
         $type = request()->input('btype') ? B_TYPE : C_TYPE;
-        $code = request()->input('btype') ?? request()->input('ctype');
+        $code = request()->input('btype') ? request()->input('btype') : request()->input('ctype');
         if (!$code || !$type) return redirect()->to('/');
 
         $motoCategory = new \MotoCategory();
