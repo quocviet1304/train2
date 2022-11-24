@@ -12,42 +12,44 @@ const app = {
     loadData(update = false)
     {
         let cars = $('#cars');
-        let categoryColumn = cars.data('category');
-        if(!update) app.page_default = 1;
+        if(cars.length !== 0){
+            let categoryColumn = cars.data('category');
+            if(!update) app.page_default = 1;
 
-        $.ajax({
-            url: '/ajax/getProducts',
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                    "content"
-                ),
-            },
-            type: "POST",
-            dataType: "json",
-            data: {
-                categoryColumn,
-                page: app.page_default,
-                model_kana_prefix: app.model_kana_prefix,
-                model_name_prefix: app.model_name_prefix,
-                model_displacement: app.model_displacement,
-                model_maker_code: app.model_maker_code,
-            },
-            success: function (result) {
+            $.ajax({
+                url: '/ajax/getProducts',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                type: "POST",
+                dataType: "json",
+                data: {
+                    categoryColumn,
+                    page: app.page_default,
+                    model_kana_prefix: app.model_kana_prefix,
+                    model_name_prefix: app.model_name_prefix,
+                    model_displacement: app.model_displacement,
+                    model_maker_code: app.model_maker_code,
+                },
+                success: function (result) {
 
-                if (update) {
-                    if (result) cars.children('.list-card').append(result)
-                } else {
-                    app.model_code.code = [];
-                    app.model_code.maker = [];
-                    cars.children('.list-card').html(result)
+                    if (update) {
+                        if (result) cars.children('.list-card').append(result)
+                    } else {
+                        app.model_code.code = [];
+                        app.model_code.maker = [];
+                        cars.children('.list-card').html(result)
+                    }
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status)
+                    console.log(thrownError)
                 }
-
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status)
-                console.log(thrownError)
-            }
-        });
+            });
+        }
 
     },
     filter()
