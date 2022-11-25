@@ -2060,10 +2060,8 @@ module.exports = {
   \*****************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var _app;
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-var app = (_app = {
+var app = {
   page_default: 1,
   model_kana_prefix: [],
   model_name_prefix: [],
@@ -2073,12 +2071,11 @@ var app = (_app = {
     code: [],
     maker: []
   },
-  filter: ['model_kana_prefix', 'model_name_prefix', 'model_displacement', 'model_maker_code'],
+  listFilter: ['model_kana_prefix', 'model_name_prefix', 'model_displacement', 'model_maker_code'],
   loadData: function loadData() {
     var update = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var queryString = window.location.search;
     var urlParams = new URLSearchParams(queryString);
-    console.log(urlParams.get('model_displacement'));
     var cars = $('#cars');
     if (cars.length !== 0) {
       var categoryColumn = cars.data('category');
@@ -2087,8 +2084,8 @@ var app = (_app = {
         categoryColumn: categoryColumn,
         page: app.page_default
       };
-      app.filter.forEach(function (value, index) {
-        if (urlParams.get(value)) data.push(urlParams.get(value));
+      app.listFilter.forEach(function (item, value) {
+        if (urlParams.get(item)) data[item] = urlParams.get(item);
       });
       $.ajax({
         url: '/ajax/getProducts',
@@ -2113,92 +2110,96 @@ var app = (_app = {
         }
       });
     }
-  }
-}, _defineProperty(_app, "filter", function filter() {
-  $(document).on("click", '.action-filter', function (e) {
-    if ($(this).hasClass('disable')) {
-      e.preventDefault();
+  },
+  filter: function filter() {
+    $(document).on("click", '.action-filter', function (e) {
+      if ($(this).hasClass('disable')) {
+        e.preventDefault();
 
-      // let value = $(this).data('val');
-      // let typeFilter = $(this).parents('.group-input').data('model');
-      //
-      // if ($(this).hasClass('active')) {
-      //     let index = app[typeFilter].findIndex( item => item === value );
-      //     if(index > -1){
-      //         app[typeFilter].splice(index, 1)
-      //     }
-      // } else {
-      //     app[typeFilter].push(value);
-      // }
-      //
-      // if (typeFilter === 'model_kana_prefix') {
-      //     app.model_name_prefix = [];
-      //     $('.filter .group-input[data-model=model_name_prefix]').children().children().removeClass('active');
-      // } else if(typeFilter === 'model_name_prefix') {
-      //     app.model_kana_prefix = [];
-      //     $('.filter .group-input[data-model=model_kana_prefix]').children().children().removeClass('active');
-      // }
-      //
-      // $(this).toggleClass('active');
-      // app.loadData()
-    }
-  });
-
-  // $(document).on("click", ".reset-all", function () {
-  //     app.model_kana_prefix = [];
-  //     app.model_name_prefix = [];
-  //     app.model_displacement = [];
-  //     app.model_maker_code = [];
-  //     app.page_default = 1;
-  //     $('.action-filter').removeClass('active');
-  //     app.loadData()
-  // })
-}), _defineProperty(_app, "scrollLoad", function scrollLoad() {
-  $(document).on('scroll', function () {
-    if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
-      app.page_default++;
-      app.loadData(true);
-    }
-  });
-}), _defineProperty(_app, "handleChooseCar", function handleChooseCar() {
-  function removeModelCode(code, maker) {
-    var codeIndex = app.model_code.code.findIndex(function (item) {
-      return item === code;
-    });
-    var makerIndex = app.model_code.maker.findIndex(function (item) {
-      return item === maker;
-    });
-    if (codeIndex > -1) app.model_code.code.splice(codeIndex, 1);
-    if (makerIndex > -1) app.model_code.maker.splice(makerIndex, 1);
-  }
-  $(document).on('change', '.checkbox-item', function () {
-    var code = $(this).data('code');
-    var maker = $(this).data('maker');
-    if (this.checked) {
-      if (app.model_code.code.length >= 10) {
-        alert('一度に10車種まで選択できます。');
-        removeModelCode(code, maker);
-        $(this).prop('checked', '');
-      } else {
-        app.model_code.code.push(code);
-        app.model_code.maker.push(maker);
+        // let value = $(this).data('val');
+        // let typeFilter = $(this).parents('.group-input').data('model');
+        //
+        // if ($(this).hasClass('active')) {
+        //     let index = app[typeFilter].findIndex( item => item === value );
+        //     if(index > -1){
+        //         app[typeFilter].splice(index, 1)
+        //     }
+        // } else {
+        //     app[typeFilter].push(value);
+        // }
+        //
+        // if (typeFilter === 'model_kana_prefix') {
+        //     app.model_name_prefix = [];
+        //     $('.filter .group-input[data-model=model_name_prefix]').children().children().removeClass('active');
+        // } else if(typeFilter === 'model_name_prefix') {
+        //     app.model_kana_prefix = [];
+        //     $('.filter .group-input[data-model=model_kana_prefix]').children().children().removeClass('active');
+        // }
+        //
+        // $(this).toggleClass('active');
+        // app.loadData()
       }
-    } else {
-      removeModelCode(code, maker);
+    });
+
+    // $(document).on("click", ".reset-all", function () {
+    //     app.model_kana_prefix = [];
+    //     app.model_name_prefix = [];
+    //     app.model_displacement = [];
+    //     app.model_maker_code = [];
+    //     app.page_default = 1;
+    //     $('.action-filter').removeClass('active');
+    //     app.loadData()
+    // })
+  },
+  scrollLoad: function scrollLoad() {
+    $(document).on('scroll', function () {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+        app.page_default++;
+        app.loadData(true);
+      }
+    });
+  },
+  handleChooseCar: function handleChooseCar() {
+    function removeModelCode(code, maker) {
+      var codeIndex = app.model_code.code.findIndex(function (item) {
+        return item === code;
+      });
+      var makerIndex = app.model_code.maker.findIndex(function (item) {
+        return item === maker;
+      });
+      if (codeIndex > -1) app.model_code.code.splice(codeIndex, 1);
+      if (makerIndex > -1) app.model_code.maker.splice(makerIndex, 1);
     }
-  });
-}), _defineProperty(_app, "handleCheckbox", function handleCheckbox() {
-  $(document).on('click', '#add-car', function () {
-    if (app.model_code.code.length === 0) {
-      alert('検索対象の車種を選択してください。');
-    } else {
-      var urlCode = app.model_code.code.join('_');
-      var urlMaker = app.model_code.maker.join('_');
-      console.log([urlCode, urlMaker]);
-      location.href = "/area?mmc=".concat(urlMaker, "?moc=").concat(urlCode);
-    }
-  });
-}), _app);
+    $(document).on('change', '.checkbox-item', function () {
+      var code = $(this).data('code');
+      var maker = $(this).data('maker');
+      if (this.checked) {
+        if (app.model_code.code.length >= 10) {
+          alert('一度に10車種まで選択できます。');
+          removeModelCode(code, maker);
+          $(this).prop('checked', '');
+        } else {
+          app.model_code.code.push(code);
+          app.model_code.maker.push(maker);
+        }
+      } else {
+        removeModelCode(code, maker);
+      }
+    });
+  },
+  handleCheckbox: function handleCheckbox() {
+    $(document).on('click', '#add-car', function () {
+      if (app.model_code.code.length === 0) {
+        alert('検索対象の車種を選択してください。');
+      } else {
+        var urlCode = app.model_code.code.join('_');
+        var urlMaker = app.model_code.maker.join('_');
+        console.log([urlCode, urlMaker]);
+        location.href = "/area?mmc=".concat(urlMaker, "?moc=").concat(urlCode);
+      }
+    });
+  }
+};
 $(document).ready(function () {
   // app.loadData();
   app.filter();

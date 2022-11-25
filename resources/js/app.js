@@ -9,7 +9,7 @@ const app = {
         code: [],
         maker: []
     },
-    filter : [
+    listFilter : [
         'model_kana_prefix',
         'model_name_prefix',
         'model_displacement',
@@ -19,7 +19,6 @@ const app = {
     {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        console.log(urlParams.get('model_displacement'));
 
         let cars = $('#cars');
         if (cars.length !== 0) {
@@ -31,8 +30,8 @@ const app = {
                 page: app.page_default,
             }
 
-            app.filter.forEach((value, index) => {
-                if(urlParams.get(value)) data.push(urlParams.get(value))
+            app.listFilter.forEach(function (item, value){
+                if(urlParams.get(item)) data[item] = urlParams.get(item)
             })
 
             $.ajax({
