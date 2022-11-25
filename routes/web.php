@@ -20,5 +20,5 @@ Route::get('/', function () {
 
 
 Route::get('/category_model', [WebController::class, 'index'])->name('web.show');
-Route::get('/area', [WebController::class, 'handleUrl']);
+Route::get('/area', [WebController::class, 'handleUrl'])->name('web.area');
 Route::post('/ajax/getProducts', [WebController::class, 'loadData'])->name('web.loadData');

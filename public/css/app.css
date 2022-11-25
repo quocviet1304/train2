@@ -56,13 +56,23 @@ nav .breadcrumb a{
     gap: 20px;
 }
 
-.filter .group-input .list-filter span.disable
+.filter .group-input .list-filter a{
+    color: #000;
+    text-decoration: unset;
+    width: 10%;
+    white-space: nowrap;
+    display: block;
+    width: -moz-max-content;
+    width: max-content;
+}
+
+.filter .group-input .list-filter a.disable
 {
     color: #b4b4b4;
 }
 
-.filter .group-input .list-filter span:hover,
-.filter .group-input .list-filter span.active
+.filter .group-input .list-filter a:hover,
+.filter .group-input .list-filter a.active
 {
     font-weight: bold;
 }
@@ -88,6 +98,10 @@ nav .breadcrumb a{
     gap: 10px;
     padding-bottom: 20px;
 }
+#cars .list-card .card-item a{
+    text-decoration: none;
+}
+
 
 #cars .list-card .card-item{
     gap: 10px;
@@ -105,7 +119,6 @@ nav .breadcrumb a{
 }
 
 #cars .list-card img{
-    width: 45%;
     -o-object-fit: contain;
        object-fit: contain;
 }

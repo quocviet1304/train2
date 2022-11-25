@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WebController extends Controller
 {
@@ -11,9 +12,12 @@ class WebController extends Controller
     protected $pageDefault = 40;
     public function index()
     {
-        $type = request()->input('btype') ? B_TYPE : C_TYPE;
-        $code = request()->input('btype') ? request()->input('btype') : request()->input('ctype');
+        $type = request()->btype ? B_TYPE : C_TYPE;
+        $code = request()->btype ? request()->btype : request()->ctype;
         if (!$code || !$type) return redirect()->to('/');
+
+        $dataFilter = collect(request()->all())->except('btype', 'ctype')->toArray();
+        $dataFilter['page'] = 1;
 
         $motoCategory = new \MotoCategory();
         $category = $motoCategory->getMotoCategory($code, $type);
@@ -44,8 +48,12 @@ class WebController extends Controller
                         ->get();
 
         $queryProducts = DB::table('mst_model_v2')
-            ->where('mst_model_v2.' . $category['colmn'], '=', 1)
+            ->where( $category['colmn'], 1)
             ->where('model_count', '>', 0);
+
+
+        $queryProducts = $this->filter($queryProducts, $dataFilter);
+        $products = $queryProducts->paginate($this->pageDefault, ['*'], 'page', 1);
 
 
        $enableKanaPrefix = $this->getEnable($queryProducts, 'model_kana_prefix');
@@ -55,7 +63,7 @@ class WebController extends Controller
 
         return view('index', compact(
             'category', 'categoryMotoChar', 'categoryMotoDisplacement', 'totalCar', 'listMaker', 'enableKanaPrefix',
-            'enableKanaPrefix', 'enableNamePrefix', 'enableDisplacement', 'enableMakerCode'
+            'enableKanaPrefix', 'enableNamePrefix', 'enableDisplacement', 'enableMakerCode', 'products'
         ));
 
     }
@@ -69,8 +77,8 @@ class WebController extends Controller
             ->where('mst_model_v2.' . $data['categoryColumn'], '=', 1)
             ->where('model_count', '>', 0);
 
-        $products = $this->filter($queryData, $data);
-
+        $queryProducts = $this->filter($queryData, $data);
+        $products = $queryProducts->paginate($this->pageDefault, ['*'], 'page', $data['page']);
 
         $jsonData = view('components.load-data',compact('products'))->render();
 
@@ -81,6 +89,7 @@ class WebController extends Controller
     {
         $filterBetWeen = ['model_displacement'];
         foreach (collect($data)->except('categoryColumn', 'page') as $key => $item) {
+            $item = explode('-', $item);
             if (in_array($key, $filterBetWeen)) {
                 foreach ($item as $index => $val) {
                     $arrVal = explode('_', $val);
@@ -95,7 +104,7 @@ class WebController extends Controller
             }
         }
 
-        return $queryData->paginate($this->pageDefault, ['*'], 'page', $data['page']);
+        return $queryData;
 
     }
 
@@ -107,7 +116,8 @@ class WebController extends Controller
                             ->toArray();
     }
 
-    public function handleUrl(){
+    public function handleUrl()
+    {
         dd('done');
     }
 }

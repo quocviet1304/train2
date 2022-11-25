@@ -26,7 +26,7 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ $category['name'] }}</li>
             </ol>
         </nav>
-        <h1 id="title">{{ $category['name'] }} {{ $totalCar->total_model }}車種({{ number_format($totalCar->total_bike) }})</h1>
+        <h1 id="title">{{ $category['name'] }} {{ $totalCar->total_model }}車種({{ number_format($totalCar->total_bike) }}台)</h1>
         <div class="filter">
             <p class="mb-1 mt-2">Filter</p>
             <div class="group-input d-flex align-items-center" data-model="model_kana_prefix">
@@ -34,7 +34,7 @@
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoChar as $character)
                         @if(json_decode($character)->type === '1')
-                            <span class="action-filter @if(!in_array(json_decode($character)->code ,$enableKanaPrefix)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($character)->code }}" >{{ json_decode($character)->name }}</span>
+                            <a href="{{ pushParamUrl('model_kana_prefix', json_decode($character)->code) }}" class="action-filter @if(!in_array(json_decode($character)->code ,$enableKanaPrefix)) disable @endif" style="cursor: pointer" >{{ json_decode($character)->name }}</a>
                         @endif
                     @endforeach
                 </div>
@@ -44,7 +44,7 @@
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoChar as $character)
                         @if(json_decode($character)->type === '2')
-                            <span class="action-filter @if(!in_array(json_decode($character)->code ,$enableNamePrefix)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($character)->code }}" >{{ json_decode($character)->name }}</span>
+                            <a href="{{ pushParamUrl('model_name_prefix', json_decode($character)->code) }}" class="action-filter @if(!in_array(json_decode($character)->code ,$enableNamePrefix)) disable @endif" style="cursor: pointer" >{{ json_decode($character)->name }}</a>
                         @endif
                     @endforeach
                 </div>
@@ -53,7 +53,7 @@
                 <h5 class="title" >排気:</h5>
                 <div class="list-filter d-flex">
                     @foreach($categoryMotoDisplacement as $displacement)
-                        <span class="action-filter @if(!get_value_between_in_array($enableDisplacement, json_decode($displacement)->from, json_decode($displacement)->to)) disable @endif" style="cursor: pointer" data-val="{{ json_decode($displacement)->key }}" >{{ json_decode($displacement)->name }}</span>
+                        <a href="{{ pushParamUrl('model_displacement', json_decode($displacement)->key) }}" class="action-filter @if(!get_value_between_in_array($enableDisplacement, json_decode($displacement)->from, json_decode($displacement)->to)) disable @endif" style="cursor: pointer"  >{{ json_decode($displacement)->name }}</a>
                     @endforeach
                 </div>
             </div>
@@ -61,16 +61,28 @@
                 <h5 class="title" >排気:</h5>
                 <div class="list-filter d-flex">
                     @foreach($listMaker as $maker)
-                        <span class="action-filter @if(!in_array($maker->model_maker_code ,$enableMakerCode)) disable @endif" style="cursor: pointer" data-val="{{ $maker->model_maker_code }}" >{{ $maker->model_maker_hyouji }}</span>
+                        <a href="{{ pushParamUrl('model_maker_code', $maker->model_maker_code) }}" class="action-filter @if(!in_array($maker->model_maker_code ,$enableMakerCode)) disable @endif" style="cursor: pointer" >{{ $maker->model_maker_hyouji }}</a>
                     @endforeach
                 </div>
             </div>
-            <a href="javascript:;" class="reset-all d-block text-white">Reset</a>
+            <a href="{{ url()->current().'?'.http_build_query(request()->only('ctype', 'btype')) }}" class="reset-all d-block text-white">Reset</a>
         </div>
         <div id="cars" class="mt-5" data-category="{{ $category['colmn'] }}">
             <h3 class="mb-2">カテゴリ車種一覧</h3>
             <div class="list-card">
-
+                @forelse($products as $product)
+                    <div class="card-item d-flex">
+                        <a href="" class="d-block"><img src="{{ $product->model_image_url }}" alt="" class="img-fluid" /></a>
+                        <div>
+                            <div class="card-checkbox d-flex align-items-center">
+                                <input type="checkbox" data-code="{{ $product->model_code }}" data-maker="{{ $product->model_maker_code }}" class="checkbox-item" id="product{{ $product->model_code }}">
+                                <label for="" class="mb-0"><a href="{{ route('web.area') . '?mmc=' . $product->model_maker_code . '?moc=' . $product->model_code }}">{{ $product->model_name }}</a> ({{ $product->model_count }})</label>
+                            </div>
+                            <span class="price">{{ ($product->model_kakaku_min / 10000) }} 万円 - {{ ($product->model_kakaku_max / 10000) }} 万円</span>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
             </div>
             <a href="javascript:;" id="add-car">一度に10車種まで選択できます(10)</a>
         </div>
