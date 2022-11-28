@@ -84,7 +84,7 @@
         <div class="list-card">
             @forelse($products as $product)
                 <div class="card-item d-flex">
-                    <a href="" class="d-block"><img class="img-fluid" data-src="{{ $product->model_image_url }}" data-src-retina="{{ $product->model_image_url }}" src="{{ $product->model_image_url }}"></a>
+                    <a href="" class="d-block"><img class="img-fluid" data-src="{{ $product->model_image_url }}" data-src-retina="{{ $product->model_image_url }}" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.citypng.com%2Fphoto%2F20701%2Floading-load-icon-transparent-png&psig=AOvVaw2J_aJA_NfgT166wtsyoDak&ust=1669709434910000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCNCnzcG20PsCFQAAAAAdAAAAABAD"></a>
                     <div>
                         <div class="card-checkbox d-flex align-items-center">
                             <input type="checkbox" data-code="{{ $product->model_code }}" data-maker="{{ $product->model_maker_code }}" class="checkbox-item" id="product{{ $product->model_code }}">
