@@ -58,10 +58,10 @@ class WebController extends Controller
         ];
 
         $enable = [
-            'enableKanaPrefix' => $this->getEnable($queryProducts, 'model_kana_prefix'),
-            'enableNamePrefix' => $this->getEnable($queryProducts, 'model_name_prefix'),
-            'enableDisplacement' => $this->getEnable($queryProducts, 'model_displacement'),
-            'enableMakerCode' => $this->getEnable($queryProducts, 'model_maker_code')
+            'enableKanaPrefix' => $this->getEnable((clone $queryProducts), 'model_kana_prefix'),
+            'enableNamePrefix' => $this->getEnable((clone $queryProducts), 'model_name_prefix'),
+            'enableDisplacement' => $this->getEnable((clone $queryProducts), 'model_displacement'),
+            'enableMakerCode' => $this->getEnable((clone $queryProducts), 'model_maker_code')
         ];
 
         $active = [
@@ -102,9 +102,9 @@ class WebController extends Controller
             if (in_array($key, $filterBetWeen)) {
                 foreach ($item as $index => $val) {
                     $arrVal = explode('_', $val);
-                    if($index === 0){
+                    if ($index === 0) {
                         $queryData->whereBetween($key, [ $arrVal[0], $arrVal[1] ]);
-                    }else{
+                    } else {
                         $queryData->orWhereBetween($key, [ $arrVal[0], $arrVal[1] ]);
                     }
                 }

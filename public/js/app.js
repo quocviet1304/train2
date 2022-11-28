@@ -2103,6 +2103,7 @@ var app = {
             app.model_code.maker = [];
             cars.children('.list-card').html(result);
           }
+          $('img').unveil(200);
         },
         error: function error(xhr, ajaxOptions, thrownError) {
           console.log(xhr.status);
@@ -2206,7 +2207,7 @@ $(document).ready(function () {
   app.scrollLoad();
   app.handleCheckbox();
   app.handleChooseCar();
-  $("img").unveil(200);
+  $('img').unveil(200);
 });
 
 /***/ }),

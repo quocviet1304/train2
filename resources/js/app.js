@@ -54,6 +54,8 @@ const app = {
                         cars.children('.list-card').html(result)
                     }
 
+                    $('img').unveil(200);
+
                 },
                 error: function(xhr, ajaxOptions, thrownError)
                 {
@@ -165,6 +167,6 @@ $(document).ready(function () {
     app.scrollLoad()
     app.handleCheckbox()
     app.handleChooseCar()
-    $("img").unveil(200);
+    $('img').unveil(200);
 })
 
