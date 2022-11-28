@@ -1,6 +1,6 @@
 @forelse($products as $product)
     <div class="card-item d-flex">
-        <a href="" class="d-block"><img src="{{ $product->model_image_url }}" alt="" class="img-fluid lazy" /></a>
+        <a href="" class="d-block"><img src="{{ $product->model_image_url }}" data-src="{{ $product->model_image_url }}" alt="" class="img-fluid lazy" /></a>
         <div>
             <div class="card-checkbox d-flex align-items-center">
                 <input type="checkbox" data-code="{{ $product->model_code }}" data-maker="{{ $product->model_maker_code }}" class="checkbox-item" id="product{{ $product->model_code }}">
